@@ -7,3 +7,41 @@ body {
   margin:0;
   padding:0;
 }
+
+.explorer {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.new-todo {
+  background-color: #B5B5B5;
+  height: 50px;
+}
+
+.explorer__content {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.explorer__todo-list {
+  background-color: #fff;
+  flex-grow: 25;
+}
+
+.list-sort-settings {
+  background-color: bisque;
+  width: 130px;
+  flex-grow: 1;
+  padding: 5px 15px 0px 15px;
+}
+
+.list-sort-settings__title {
+  font-size: 110%;
+  height: 30px;
+  vertical-align: middle;
+}

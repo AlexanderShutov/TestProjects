@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { autobind } from 'core-decorators';
-import { getEntity } from './api';
+import { getEntity } from '../api';
 
 type TestButtonProps = {
   text: string
