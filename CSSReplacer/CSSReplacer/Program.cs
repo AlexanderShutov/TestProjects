@@ -31,7 +31,7 @@ namespace CSSReplacer
       public bool IsUsed { get; set; }
     }
 
-    class Variables : List<VariableReplace> { }    
+    class Variables : List<VariableReplace> { }
 
 
     /*
@@ -60,10 +60,29 @@ namespace CSSReplacer
             int startIndex = currentLine.IndexOf("--");
             int endIndex = currentLine.IndexOf(":");
             var variable = currentLine.Substring(startIndex, endIndex - startIndex);
-            if (!variable.StartsWith("--" + shortFileName + "-"))
-              incorrectVariables.Add(new VariableReplace() { Old = variable, New = variable.Replace("--", "--" + shortFileName + "-"), FoundInFile = fileInfo.FullName });
-            else if (variable.Contains("_"))
-              incorrectVariables.Add(new VariableReplace() { Old = variable, New = variable.Replace("_", "-"), FoundInFile = fileInfo.FullName });
+            // убрать rx-
+            if (variable.Contains("rx-"))
+              incorrectVariables.Add(
+                new VariableReplace() { Old = variable, New = variable.Replace("rx-", ""), FoundInFile = fileInfo.FullName });
+            else if (variable.Contains("fontFamily"))
+              incorrectVariables.Add(
+                new VariableReplace() { Old = variable, New = variable.Replace("fontFamily", "font-family"), FoundInFile = fileInfo.FullName });
+            else if (variable.Contains("fontSize"))
+              incorrectVariables.Add(
+                new VariableReplace() { Old = variable, New = variable.Replace("fontSize", "font-size"), FoundInFile = fileInfo.FullName });
+            else if (variable.Contains("fontWeight"))
+              incorrectVariables.Add(
+                new VariableReplace() { Old = variable, New = variable.Replace("fontWeight", "font-weight"), FoundInFile = fileInfo.FullName });
+            // --module-var -> module_var
+            else if (variable.StartsWith("--" + shortFileName + "-"))
+              incorrectVariables.Add(
+                new VariableReplace() { Old = variable, New = variable.Replace("--" + shortFileName + "-", "--" + shortFileName + "_"), FoundInFile = fileInfo.FullName });
+            // --var -> module_var
+            else if (!variable.StartsWith("--" + shortFileName + "_"))
+              incorrectVariables.Add(
+                new VariableReplace() { Old = variable, New = variable.Replace("--", "--" + shortFileName + "_"), FoundInFile = fileInfo.FullName });
+            /*else if (variable.Contains("_"))
+              incorrectVariables.Add(new VariableReplace() { Old = variable, New = variable.Replace("_", "-"), FoundInFile = fileInfo.FullName });*/
           }
         }
       }
@@ -169,10 +188,48 @@ namespace CSSReplacer
       }
     }
 
+    static void CheckResultFile(string fileName)
+    {
+      string currentLine = "";
+      string previousLine = "";
+      string previousVariable = "";
+      string currentVariable = "";
+
+      using (var inputFile = new System.IO.FileStream(fileName,
+        System.IO.FileMode.Open, System.IO.FileAccess.Read,
+        System.IO.FileShare.Read))
+      using (var textReader = new System.IO.StreamReader(inputFile))
+      {
+        while (!textReader.EndOfStream)
+        {
+          previousLine = currentLine;
+          previousVariable = currentVariable;
+
+          currentLine = textReader.ReadLine();
+
+          if (currentLine.Contains(":"))
+          {
+            currentVariable = currentLine.Substring(0, currentLine.IndexOf(":"));
+
+            if (!string.IsNullOrWhiteSpace(currentVariable) && !currentVariable.Contains(".") && (currentVariable == previousVariable))
+            {
+              Console.WriteLine(
+                (previousLine.Contains("--theme") ? string.Empty : "!!!!") + currentVariable);
+
+              Console.WriteLine("\t" + previousLine);
+              Console.WriteLine("\t" + currentLine);
+            }
+          }
+          else
+            currentVariable = string.Empty;
+        }
+      }
+    }
+
     static void Main(string[] args)
     {
       List<FileInfo> files = new List<FileInfo>();
-    
+
       SearchCss(@"D:\Projects\Sungero\Web\src\SungeroClient.Web\src", files);
 
       // Замена переменных.
@@ -181,20 +238,20 @@ namespace CSSReplacer
       // files.Remove(files.Find(t => t.Name == "theme-night.css"));
       // files.Remove(files.Find(t => t.Name == "theme.css"));
 
-    /*  Variables incorrectVariables = new Variables();
+     /* Variables incorrectVariables = new Variables();
       foreach (var file in files)
       {
         FindIncorrectVariables(file, incorrectVariables);
-        if (incorrectVariables.Count > 0)
+      }
+      if (incorrectVariables.Count > 0)
+      {
+        //Console.WriteLine("~~~~~~~~~~~~~~~~~~ " + file.Name + " ~~~~~~~~~~~~~~~~");
+        foreach (var x in incorrectVariables)
         {
-          //Console.WriteLine("~~~~~~~~~~~~~~~~~~ " + file.Name + " ~~~~~~~~~~~~~~~~");
-          foreach (var x in incorrectVariables)
-          {
-            //Console.WriteLine(x.Old + "\t" + x.New);
-          }
+          Console.WriteLine(x.Old + "\t" + x.New);
         }
       }
-
+      
       foreach (VariableReplace vr in incorrectVariables)
       {
         Console.WriteLine();
@@ -212,9 +269,9 @@ namespace CSSReplacer
           Console.WriteLine("Replace " + vr2.Old + " with \t" + vr2.New);
         }
       }*/
-      
+
       // Чек - необъявленные переменные, неиспользуемые переменные.
-      
+
       files.Remove(files.Find(t => t.Name == "theme-night.css"));
       Variables allVariables = new Variables();
       foreach (var file in files)
@@ -224,21 +281,27 @@ namespace CSSReplacer
 
       Console.WriteLine();
 
+      /*foreach (var variable in allVariables)
+        Console.WriteLine(variable.Old);*/
+
       foreach (var variable in allVariables.Where(t => !t.IsUsed))
         Console.WriteLine("Unused variable " + variable.Old + "\t" + variable.FoundInFile);
 
-      Console.WriteLine();
+      //Console.WriteLine();
 
-      foreach (var variable in allVariables.Where(t => t.Old.Contains("_")))
-        Console.WriteLine("Incorrect variable name " + variable.Old + "\t" + variable.FoundInFile);
-        
+      /*foreach (var variable in allVariables.Where(t => t.Old.Contains("_")))
+        Console.WriteLine("Incorrect variable name " + variable.Old + "\t" + variable.FoundInFile);*/
+
       /*Console.WriteLine("All variables");
 
       foreach (var variable in allVariables.Where(t => true))
         Console.WriteLine(variable.Old 
         //+ "\t" + variable.FoundInFile*
         );*/
-        
+
+
+      //CheckResultFile(@"D:\Projects\Sungero\Web\src\SungeroClient.Host\content\appStyles_3.1.0.0000.css");
+
       Console.ReadKey();
     }
   }
