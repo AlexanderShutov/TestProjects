@@ -16,12 +16,8 @@ body {
   height: 100%;
 }
 
-.new-todo {
-  background-color: #B5B5B5;
-  height: 50px;
-}
-
 .explorer__content {
+  background-color: rbg(0, 36, 81);
   display: flex;
   flex-grow: 1;
   flex-direction: row;
@@ -29,19 +25,83 @@ body {
 }
 
 .explorer__todo-list {
-  background-color: #fff;
+  background-color: rgb(0, 36, 81);
+  color:rgb(255, 238, 173);
   flex-grow: 25;
 }
 
+/*
+  Настройки сортировки
+*/
+
 .list-sort-settings {
-  background-color: bisque;
-  width: 130px;
+  background-color: rgb(0, 23, 51);
+  color: rgb(204, 204, 204);
+  width: 140px;
   flex-grow: 1;
   padding: 5px 15px 0px 15px;
 }
 
 .list-sort-settings__title {
   font-size: 110%;
-  height: 30px;
   vertical-align: middle;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
+
+.list-sort-settings__item {
+  cursor: pointer;
+  user-select: none;
+  margin-top: 5px;
+  margin-left: 10px;
+  margin-bottom: 5px;
+}
+
+/*
+  new-todo
+*/
+.new-todo {
+  display: flex;
+  flex-direction: row;
+  vertical-align: middle;
+  justify-content: space-between;
+
+  background-color: rgb(0, 28, 64);
+  color: white;
+  font-size: 120%;
+  height: 25px;
+
+  padding-top: 15px;
+  padding-bottom: 15px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.new-todo__text-label {
+  min-width: 170px;
+}
+
+.new-todo__text-input {
+  flex-grow: 2;
+  margin-right: 10px;
+}
+
+.new-todo__importance-text{
+  min-width: 135px;
+}
+
+.new-todo__importance{
+  cursor: pointer;
+}
+
+.new-todo__add {
+  margin-left: 15px;
+  width: 120px;
+  cursor: pointer;
+}
+
+
+
+
+
+

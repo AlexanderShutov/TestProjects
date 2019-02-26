@@ -10,7 +10,13 @@ export default class NewTodo extends React.Component {
   render(): React.Element<any> {
     return (
       <div className="new-todo">
-        Haha
+        <label className="new-todo__text-label">Текст новой задачи:</label>
+        <input type="text" className="new-todo__text-input" ></input>
+        <label className="new-todo__importance-text">
+          <input type="checkbox" className="new-todo__importance" />
+          Задача важная
+        </label>
+        <button className="new-todo__add">Добавить</button>
       </div>
     );
   }
