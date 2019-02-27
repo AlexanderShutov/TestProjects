@@ -1,15 +1,12 @@
 // @flow
 
 import React from 'react';
-import { autobind } from 'core-decorators';
 import Explorer from './explorer.js';
 
-@autobind
-export default class App extends React.Component {
+const App = (): ReactElement<any> => {
+  return (
+    <Explorer />
+  );
+};
 
-  render(): React.Element<any> {
-    return (
-      <Explorer />
-    );
-  }
-}
+export default App;

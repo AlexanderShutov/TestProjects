@@ -4,6 +4,7 @@ html {
 }
 
 body {
+  user-select: none;
   margin:0;
   padding:0;
 }
@@ -22,12 +23,6 @@ body {
   flex-grow: 1;
   flex-direction: row;
   justify-content: flex-end;
-}
-
-.explorer__todo-list {
-  background-color: rgb(0, 36, 81);
-  color:rgb(255, 238, 173);
-  flex-grow: 25;
 }
 
 /*
@@ -51,7 +46,6 @@ body {
 
 .list-sort-settings__item {
   cursor: pointer;
-  user-select: none;
   margin-top: 5px;
   margin-left: 10px;
   margin-bottom: 5px;
@@ -100,8 +94,60 @@ body {
   cursor: pointer;
 }
 
+/*
+  todo-list & todo-list-item
+*/
+.todo-list {
+  background-color: rgb(0, 36, 81);
+  color: rgb(196, 241, 149);
+  flex-grow: 25;
+}
 
+.todo-list_empty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
+  background-color: rgb(0, 28, 64);
+  color: white;
+}
 
+.todo-list-item {
+  display: flex;
+  flex-direction: row;
+  height: 25px;
+  padding-top: 10px;
+  justify-content: space-between;
 
+  border-width: 1px;
+  border-color: white;
+}
 
+.todo-list-item__text {
+  flex-grow: 20;
+}
+
+.todo-list-item__text-strike-out {
+  text-decoration: line-through;
+}
+
+.todo-list-item__text-red {
+  color: rgb(255, 157, 164);
+}
+
+.todo-list-item__importance {
+  flex-grow: 0;
+  margin-left: 20px;
+  margin-right: 10px;
+  width: 20px;
+  height: 20px;
+}
+
+.todo-list-item__importance_hidden {
+  visibility: hidden;
+}
+
+.todo-list-item__modify {
+  margin-right: 10px;
+  width: 100px;
+}
