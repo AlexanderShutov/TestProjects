@@ -4,6 +4,7 @@ import type { Entity } from './entity';
 import { TodoArray, SORTORDER_BY_IMPORTANCE, SORTORDER_BY_COMPLETED } from './types';
 
 export default class TodoApi {
+  maxid: number;
   todos: TodoArray;
 
   constructor() {
@@ -35,6 +36,7 @@ export default class TodoApi {
         highImportance: true,
       }
     ];
+    this.maxid = this.todos.length;
 
   /*  пополнить карты
     взять powerbank
@@ -46,6 +48,20 @@ export default class TodoApi {
     проверить, не сдвинулся ли вылет
   */
 
+  }
+  AddTodo(text: string, highImportance: boolean) {
+    this.maxid++;
+
+    this.todos.push({
+      id: this.maxid,
+      text: text,
+      highImportance: highImportance,
+      completed: false,
+    });
+  }
+
+  DeleteTodo(id: number) {
+    this.todos = this.todos.filter(t => t.id !== id);
   }
 
   GetTodos(sortOrder: String): TodoArray {

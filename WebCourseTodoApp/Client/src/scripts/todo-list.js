@@ -6,7 +6,7 @@ import type { TodoArray } from './types';
 import { TodoListItem } from './todo-list-item';
 
 type TodoListProps = {
-  todos: TodoArray,
+  todos: TodoArray
 };
 
 @autobind
@@ -23,7 +23,7 @@ export default class TodoList extends React.Component<TodoListProps> {
           {
             todos.map((todo) => {
               return (
-                <TodoListItem key={todo.id} todo={todo} />
+                <TodoListItem key={todo.id} todo={todo} onDeleteTodo={this.props.onDeleteTodo} />
               );
             })
           }

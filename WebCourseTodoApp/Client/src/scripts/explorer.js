@@ -31,12 +31,25 @@ export default class Explorer extends React.Component {
     this.refreshList(SORTORDER_NONE);
   }
 
-  refreshList(newSortOrder: String) {
-    this.setState({ todos: this.api.GetTodos(newSortOrder), sortOrder: newSortOrder });
+  refreshList(newSortOrder: ?String) {
+    if (newSortOrder == null)
+      this.setState({ todos: this.api.GetTodos(this.state.sortOrder) });
+    else
+      this.setState({ todos: this.api.GetTodos(newSortOrder), sortOrder: newSortOrder });
   }
 
-  handleSortClick(newSortOrder: String) {
+  handleSortList(newSortOrder: String) {
     this.refreshList((this.state.sortOrder === newSortOrder) ? SORTORDER_NONE : newSortOrder);
+  }
+
+  handleAddTodo(text: string, highImportance: boolean) {
+    this.api.AddTodo(text, highImportance);
+    this.refreshList();
+  }
+
+  handleDeleteTodo(id: number) {
+    this.api.DeleteTodo(id);
+    this.refreshList();
   }
 
   render(): React.Element<any> {
@@ -44,13 +57,13 @@ export default class Explorer extends React.Component {
 
     return (
       <div className="explorer">
-        <NewTodo />
+        <NewTodo onAddTodo={this.handleAddTodo} />
         <div className="explorer__content">
-          <TodoList todos={todos} />
+          <TodoList todos={todos} onDeleteTodo={this.handleDeleteTodo} />
           <div className="list-sort-settings">
             <div className="list-sort-settings__title">Сортировать</div>
-            <div className="list-sort-settings__item" onClick={() => this.handleSortClick(SORTORDER_BY_IMPORTANCE)}>{sortOrder === SORTORDER_BY_IMPORTANCE ? '✓' : ' '} По важности</div>
-            <div className="list-sort-settings__item" onClick={() => this.handleSortClick(SORTORDER_BY_COMPLETED)}>{sortOrder === SORTORDER_BY_COMPLETED ? '✓' : ' '} По выполненности</div>
+            <div className="list-sort-settings__item" onClick={() => this.handleSortList(SORTORDER_BY_IMPORTANCE)}>{sortOrder === SORTORDER_BY_IMPORTANCE ? '✓' : ' '} По важности</div>
+            <div className="list-sort-settings__item" onClick={() => this.handleSortList(SORTORDER_BY_COMPLETED)}>{sortOrder === SORTORDER_BY_COMPLETED ? '✓' : ' '} По выполненности</div>
           </div>
         </div>
       </div>

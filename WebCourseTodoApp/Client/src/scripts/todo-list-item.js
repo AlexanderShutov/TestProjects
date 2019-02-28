@@ -47,7 +47,7 @@ export class TodoListItem extends React.Component<TodoListItemProps> {
         <img src="../images/highimportance_32.svg" className={imgClassName} />
         <label className={labelClassName}>{id + text}</label>
         <button className="todo-list-item__modify" onClick={this.handleChangeState}>{firstButtonText}</button>
-        <button className="todo-list-item__modify" onClick={this.handleClick}>Удалить</button>
+        <button className="todo-list-item__modify" onClick={() => this.props.onDeleteTodo(id)}>Удалить</button>
       </div>
     );
   }
