@@ -238,7 +238,7 @@ namespace CSSReplacer
       // files.Remove(files.Find(t => t.Name == "theme-night.css"));
       // files.Remove(files.Find(t => t.Name == "theme.css"));
 
-     /* Variables incorrectVariables = new Variables();
+      Variables incorrectVariables = new Variables();
       foreach (var file in files)
       {
         FindIncorrectVariables(file, incorrectVariables);
@@ -268,7 +268,7 @@ namespace CSSReplacer
           ReplaceVariable(vr2, files);
           Console.WriteLine("Replace " + vr2.Old + " with \t" + vr2.New);
         }
-      }*/
+      }
 
       // Чек - необъявленные переменные, неиспользуемые переменные.
 
