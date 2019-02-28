@@ -7,7 +7,7 @@ export type Todo = {
   highImportance: boolean,
 };
 
-export type TodoArray = Array<Todo>;
+export type TodoArray = ?Array<Todo>;
 
 export const SORTORDER_NONE = 'None';
 export const SORTORDER_BY_IMPORTANCE = 'ByImportance';

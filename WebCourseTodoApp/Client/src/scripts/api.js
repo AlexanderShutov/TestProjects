@@ -69,7 +69,7 @@ export default class TodoApi {
       this.todos[index].completed = !this.todos[index].completed;
   }
 
-  GetTodos(sortOrder: String): TodoArray {
+  GetTodos(sortOrder: string): TodoArray {
     if (sortOrder === SORTORDER_BY_IMPORTANCE) {
       this.todos.sort(SortByImportance);
     }
