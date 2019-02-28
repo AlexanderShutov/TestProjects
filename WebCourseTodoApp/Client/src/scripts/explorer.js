@@ -26,34 +26,33 @@ export default class Explorer extends React.Component {
   }
 
   componentDidMount() {
-    /*TODO*/
     // eslint-disable-next-line react/no-did-mount-set-state
-    this.refreshList(SORTORDER_NONE);
+    this.refreshList(SORTORDER_NONE, true);
   }
 
-  async refreshList(newSortOrder: ?string): Promise<void> {
+  async refreshList(newSortOrder: ?string, fromServer: ?boolean): Promise<void> {
     if (newSortOrder == null)
-      this.setState({ todos: await this.api.GetTodos(this.state.sortOrder) });
+      this.setState({ todos: await this.api.getAll(this.state.sortOrder, fromServer) });
     else
-      this.setState({ todos: await this.api.GetTodos(newSortOrder), sortOrder: newSortOrder });
+      this.setState({ todos: await this.api.getAll(newSortOrder, fromServer), sortOrder: newSortOrder });
   }
 
   handleSortList(newSortOrder: string) {
     this.refreshList((this.state.sortOrder === newSortOrder) ? SORTORDER_NONE : newSortOrder);
   }
 
-  handleAddTodo(text: string, highImportance: boolean) {
-    this.api.AddTodo(text, highImportance);
+  async handleAddTodo(text: string, highImportance: boolean): Promise<void> {
+    await this.api.addTodo(text, highImportance);
     this.refreshList();
   }
 
-  handleDeleteTodo(id: number) {
-    this.api.DeleteTodo(id);
+  async handleDeleteTodo(id: number): Promise<void> {
+    await this.api.delete(id);
     this.refreshList();
   }
 
-  handleReverseTodoState(id: number) {
-    this.api.ReverseTodoState(id);
+  async handleReverseTodoState(id: number): Promise<void> {
+    await this.api.reverseState(id);
     this.refreshList();
   }
 

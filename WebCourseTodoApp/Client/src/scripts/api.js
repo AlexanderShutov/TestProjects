@@ -3,89 +3,115 @@
 import { TodoArray, SORTORDER_BY_IMPORTANCE, SORTORDER_BY_COMPLETED } from './types';
 
 export default class TodoApi {
-  /* TODO надо получать его с сервера */
-  maxid: number;
   todos: TodoArray;
 
-  constructor() {
-    this.todos = [
-      {
-        id: 1,
-        text: 'посетить стоматолога',
-        highImportance: true,
-      },
-      {
-        id: 2,
-        text: 'сделать прививки',
-        highImportance: true,
-        completed: true,
-      },
-      {
-        id: 3,
-        text: 'определиться со стоянкой для машины',
-      },
-      {
-        id: 4,
-        text: 'продумать маршрут в аэропорт',
-        highImportance: false,
-        completed: true,
-      },
-      {
-        id: 5,
-        text: 'оплатить счета(телефон, коммуналка)',
-        highImportance: true,
-      }
-    ];
-  /*  пополнить карты
-    взять powerbank
-    собрать чемодан
-    сделать копии документов
-    в течение недели избавиться от продуктов в холодильнике
-    купить солнцезащитные кремы
-    собрать аптечку в дорогу
-    проверить, не сдвинулся ли вылет
-  */
-    this.maxid = this.todos.length;
+  /* Добавление */
+  async _post(text: string, highImportance: boolean): Promise<number> {
+    const options = {
+      headers: { 'Content-Type': 'application/json' },
+      method: 'POST',
+      body: JSON.stringify({ text: text, highImportance: highImportance }),
+    };
+
+    const response = await fetch('api/todo', options);
+    if (response.status === 200) {
+      return await response.text();
+    }
+    throw new Error(`Error: ${response.statusText}`);
   }
 
-  AddTodo(text: string, highImportance: boolean) {
-    this.maxid++;
+  async addTodo(text: string, highImportance: boolean): Promise<void> {
+    let newId = await this._post(text, highImportance);
 
     this.todos.push({
-      id: this.maxid,
+      id: newId,
       text: text,
       highImportance: highImportance,
       completed: false,
     });
   }
 
-  DeleteTodo(id: number) {
-    this.todos = this.todos.filter(t => t.id !== id);
+  /* Изменение состояния */
+  async _put(id: number): Promise<boolean> {
+    const options = {
+      headers: { 'Content-Type': 'application/json' },
+      method: 'PUT',
+    };
+
+    const response = await fetch('api/todo?id=' + id, options);
+    if (response.status === 200) {
+      return await response.text();
+    }
+    throw new Error(`Error: ${response.statusText}`);
   }
 
-  ReverseTodoState(id: number) {
-    let index = this.todos.findIndex(t => t.id === id);
-    if (index > -1)
-      this.todos[index].completed = !this.todos[index].completed;
+  async reverseState(id: number): Promise<boolean> {
+    if (await this._put(id)) {
+      let index = this.todos.findIndex(t => t.id === id);
+      if (index > -1) {
+        this.todos[index].completed = !this.todos[index].completed;
+      }
+      return true;
+    }
+    return false;
   }
 
-  async GetTodos(sortOrder: string): Promise<TodoArray> {
-    //let x = await getEntity();
-    //console.log(x);
+  /* Удаление */
+  async _delete(id: number): Promise<boolean> {
+    const options = {
+      headers: { 'Content-Type': 'application/json' },
+      method: 'DELETE',
+    };
+
+    const response = await fetch('api/todo?id=' + id, options);
+    if (response.status === 200) {
+      return await response.text();
+    }
+    throw new Error(`Error: ${response.statusText}`);
+  }
+
+  async delete(id: number): Promise<void> {
+    if (await this._delete(id)) {
+      this.todos = this.todos.filter(t => t.id !== id);
+      return true;
+    }
+    return false;
+  }
+
+  /* Список */
+
+  async _getAllFromServer(): Promise<TodoArray> {
+    const options = {
+      headers: { 'Content-Type': 'application/json' },
+      method: 'GET'
+    };
+    const response = await fetch('api/todo', options);
+    if (response.status === 200) {
+      return await response.json();
+    }
+    throw new Error(`Error: ${response.statusText}`);
+  }
+
+  async getAll(sortOrder: string, fromServer: boolean): Promise<TodoArray> {
+    if (fromServer)
+      this.todos = await this._getAllFromServer();
+
     if (sortOrder === SORTORDER_BY_IMPORTANCE) {
-      this.todos.sort(SortByImportance);
+      this.todos.sort(_sortByImportance);
     }
     else
       if (sortOrder === SORTORDER_BY_COMPLETED)
-        this.todos.sort(SortByCompleted);
+        this.todos.sort(_sortByCompleted);
       else
         this.todos.sort((a, b) => b.id - a.id);
 
     return await this.todos;
   }
+
+  /* Одна запись */
 }
 
-function SortByImportance(a: Todo, b: Todo): number {
+function _sortByImportance(a: Todo, b: Todo): number {
   if (a.highImportance && !b.highImportance)
     return -1;
   else
@@ -95,7 +121,7 @@ function SortByImportance(a: Todo, b: Todo): number {
       return b.id - a.id;
 }
 
-function SortByCompleted(a: Todo, b: Todo): number {
+function _sortByCompleted(a: Todo, b: Todo): number {
   if (a.completed && !b.completed)
     return 1;
   else
@@ -105,22 +131,6 @@ function SortByCompleted(a: Todo, b: Todo): number {
       return b.id - a.id;
 }
 
-type Entity = {
-  Id: number,
-  Name: string,
-};
-
-async function getEntity(): Promise<Entity> {
-  const options = {
-    headers: { 'Content-Type': 'application/json' },
-    method: 'GET'
-  };
-  const response = await fetch('api/test', options);
-  if (response.status === 200) {
-    return await response.json();
-  }
-  throw new Error(`Error: ${response.statusText}`);
-}
 
 
 
