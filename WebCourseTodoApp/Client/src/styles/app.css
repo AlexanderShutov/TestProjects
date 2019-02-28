@@ -131,6 +131,10 @@ body {
   text-decoration: line-through;
 }
 
+.todo-list-item__text-grayed {
+  color: rgb(204, 204, 204);
+}
+
 .todo-list-item__text-red {
   color: rgb(214, 86, 51);
 }

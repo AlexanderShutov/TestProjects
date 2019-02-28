@@ -15,7 +15,6 @@ type ExplorerStateProps = {
 
 @autobind
 
-// eslint-disable-next-line react/prefer-stateless-function
 export default class Explorer extends React.Component {
   api: Api;
   state: ExplorerStateProps;
@@ -27,6 +26,7 @@ export default class Explorer extends React.Component {
   }
 
   componentDidMount() {
+    /*TODO*/
     // eslint-disable-next-line react/no-did-mount-set-state
     this.refreshList(SORTORDER_NONE);
   }

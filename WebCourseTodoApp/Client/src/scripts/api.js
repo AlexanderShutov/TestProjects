@@ -1,6 +1,5 @@
 // @flow
 
-import type { Entity } from './entity';
 import { TodoArray, SORTORDER_BY_IMPORTANCE, SORTORDER_BY_COMPLETED } from './types';
 
 export default class TodoApi {
@@ -104,6 +103,12 @@ function SortByCompleted(a: Todo, b: Todo): number {
       return b.id - a.id;
 }
 
+export type Entity = {
+  Id: number,
+  Name: string,
+};
+
+/*TODO*/
 export async function getEntity(): Promise<Entity> {
   const options = {
     headers: { 'Content-Type': 'application/json' },

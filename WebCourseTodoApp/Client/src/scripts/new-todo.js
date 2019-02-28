@@ -9,6 +9,7 @@ type NewTodoProps = {
 };
 
 @autobind
+
 export default class NewTodo extends React.Component<NewTodoProps> {
   props: NewTodoProps;
 
