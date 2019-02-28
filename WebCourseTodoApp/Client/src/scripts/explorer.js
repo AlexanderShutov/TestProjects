@@ -31,11 +31,11 @@ export default class Explorer extends React.Component {
     this.refreshList(SORTORDER_NONE);
   }
 
-  refreshList(newSortOrder: ?string) {
+  async refreshList(newSortOrder: ?string): Promise<void> {
     if (newSortOrder == null)
-      this.setState({ todos: this.api.GetTodos(this.state.sortOrder) });
+      this.setState({ todos: await this.api.GetTodos(this.state.sortOrder) });
     else
-      this.setState({ todos: this.api.GetTodos(newSortOrder), sortOrder: newSortOrder });
+      this.setState({ todos: await this.api.GetTodos(newSortOrder), sortOrder: newSortOrder });
   }
 
   handleSortList(newSortOrder: string) {

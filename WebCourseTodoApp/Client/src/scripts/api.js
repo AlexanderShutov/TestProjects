@@ -3,6 +3,7 @@
 import { TodoArray, SORTORDER_BY_IMPORTANCE, SORTORDER_BY_COMPLETED } from './types';
 
 export default class TodoApi {
+  /* TODO надо получать его с сервера */
   maxid: number;
   todos: TodoArray;
 
@@ -35,8 +36,6 @@ export default class TodoApi {
         highImportance: true,
       }
     ];
-    this.maxid = this.todos.length;
-
   /*  пополнить карты
     взять powerbank
     собрать чемодан
@@ -46,8 +45,9 @@ export default class TodoApi {
     собрать аптечку в дорогу
     проверить, не сдвинулся ли вылет
   */
-
+    this.maxid = this.todos.length;
   }
+
   AddTodo(text: string, highImportance: boolean) {
     this.maxid++;
 
@@ -69,7 +69,9 @@ export default class TodoApi {
       this.todos[index].completed = !this.todos[index].completed;
   }
 
-  GetTodos(sortOrder: string): TodoArray {
+  async GetTodos(sortOrder: string): Promise<TodoArray> {
+    //let x = await getEntity();
+    //console.log(x);
     if (sortOrder === SORTORDER_BY_IMPORTANCE) {
       this.todos.sort(SortByImportance);
     }
@@ -79,7 +81,7 @@ export default class TodoApi {
       else
         this.todos.sort((a, b) => b.id - a.id);
 
-    return this.todos;
+    return await this.todos;
   }
 }
 
@@ -103,13 +105,12 @@ function SortByCompleted(a: Todo, b: Todo): number {
       return b.id - a.id;
 }
 
-export type Entity = {
+type Entity = {
   Id: number,
   Name: string,
 };
 
-/*TODO*/
-export async function getEntity(): Promise<Entity> {
+async function getEntity(): Promise<Entity> {
   const options = {
     headers: { 'Content-Type': 'application/json' },
     method: 'GET'
