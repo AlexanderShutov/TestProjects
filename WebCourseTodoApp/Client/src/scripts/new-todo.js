@@ -4,11 +4,23 @@ import React from 'react';
 import { autobind } from 'core-decorators';
 import '../styles/app.css';
 
+type NewTodoProps = {
+  onAddTodo: (text: string, highImportance: boolean) => void,
+};
+
 @autobind
-export default class NewTodo extends React.Component {
+export default class NewTodo extends React.Component<NewTodoProps> {
+  props: NewTodoProps;
 
   componentDidMount() {
     this.newTodoText.focus();
+  }
+
+  handleAddTodoClick() {
+    if (this.newTodoText.value === '')
+      this.newTodoText.focus();
+    else
+      this.props.onAddTodo(this.newTodoText.value, this.newTodoHighImportance.checked);
   }
 
   render(): React.Element<any> {
@@ -21,7 +33,7 @@ export default class NewTodo extends React.Component {
           Задача важная
         </label>
         <button className="new-todo__add"
-          onClick={() => this.props.onAddTodo(this.newTodoText.value, this.newTodoHighImportance.checked)}>Добавить</button>
+          onClick={this.handleAddTodoClick}>Добавить</button>
       </div>
     );
   }

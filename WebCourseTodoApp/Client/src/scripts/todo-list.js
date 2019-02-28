@@ -3,10 +3,12 @@
 import React from 'react';
 import { autobind } from 'core-decorators';
 import type { TodoArray } from './types';
-import { TodoListItem } from './todo-list-item';
+import TodoListItem from './todo-list-item';
 
 type TodoListProps = {
-  todos: TodoArray
+  todos: TodoArray,
+  onReverseTodoState: (id: number) => void,
+  onDeleteTodo: (id: number) => void,
 };
 
 @autobind
@@ -21,11 +23,11 @@ export default class TodoList extends React.Component<TodoListProps> {
       return (
         <div className="todo-list">
           {
-            todos.map((todo) => {
-              return (
-                <TodoListItem key={todo.id} todo={todo} onDeleteTodo={this.props.onDeleteTodo} />
-              );
-            })
+          todos.map((todo) => {
+            return (
+              <TodoListItem key={todo.id} todo={todo} />
+            );
+          })
           }
         </div>
       );
@@ -35,3 +37,5 @@ export default class TodoList extends React.Component<TodoListProps> {
     }
   }
 }
+
+// onDeleteTodo={this.props.onDeleteTodo} onReverseTodoState={this.props.onReverseTodoState}

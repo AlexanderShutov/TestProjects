@@ -52,6 +52,11 @@ export default class Explorer extends React.Component {
     this.refreshList();
   }
 
+  handleReverseTodoState(id: number) {
+    this.api.ReverseTodoState(id);
+    this.refreshList();
+  }
+
   render(): React.Element<any> {
     const { todos, sortOrder } = this.state;
 
@@ -59,7 +64,7 @@ export default class Explorer extends React.Component {
       <div className="explorer">
         <NewTodo onAddTodo={this.handleAddTodo} />
         <div className="explorer__content">
-          <TodoList todos={todos} onDeleteTodo={this.handleDeleteTodo} />
+          <TodoList todos={todos} onDeleteTodo={this.handleDeleteTodo} onReverseTodoState={this.handleReverseTodoState} />
           <div className="list-sort-settings">
             <div className="list-sort-settings__title">Сортировать</div>
             <div className="list-sort-settings__item" onClick={() => this.handleSortList(SORTORDER_BY_IMPORTANCE)}>{sortOrder === SORTORDER_BY_IMPORTANCE ? '✓' : ' '} По важности</div>

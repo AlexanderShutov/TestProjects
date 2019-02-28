@@ -6,32 +6,15 @@ import { Todo } from './types';
 
 type TodoListItemProps = {
   todo: Todo,
+  onReverseTodoState: (id: number) => void,
+  onDeleteTodo: (id: number) => void,
 };
 
 @autobind
 
-export class TodoListItem extends React.Component<TodoListItemProps> {
+// eslint-disable-next-line react/prefer-stateless-function
+export default class TodoListItem extends React.Component {
   props: TodoListItemProps;
-
-/*  async handleClick(): Promise<void> {
-    try {
-      // const entity = await getEntity();
-      // alert(`Entity loaded: ${entity.Name}`);
-      alert('123');
-    }
-    catch (error) {
-      console.log(error.message);
-    }
-  }
-
-  async handleChangeState(): Promise<void> {
-    try {
-      this.setState({ completed: !this.state.completed });
-    }
-    catch (error) {
-      console.log(error.message);
-    }
-  }*/
 
   render(): React.Element<any> {
     const { id, text, completed, highImportance } = this.props.todo;
@@ -46,9 +29,11 @@ export class TodoListItem extends React.Component<TodoListItemProps> {
       <div className="todo-list-item">
         <img src="../images/highimportance_32.svg" className={imgClassName} />
         <label className={labelClassName}>{id + text}</label>
-        <button className="todo-list-item__modify" onClick={this.handleChangeState}>{firstButtonText}</button>
+        <button className="todo-list-item__modify" onClick={() => this.props.onReverseTodoState(id)}>{firstButtonText}</button>
         <button className="todo-list-item__modify" onClick={() => this.props.onDeleteTodo(id)}>Удалить</button>
       </div>
     );
   }
 }
+
+

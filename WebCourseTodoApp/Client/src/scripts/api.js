@@ -64,6 +64,12 @@ export default class TodoApi {
     this.todos = this.todos.filter(t => t.id !== id);
   }
 
+  ReverseTodoState(id: number) {
+    let index = this.todos.findIndex(t => t.id === id);
+    if (index > -1)
+      this.todos[index].completed = !this.todos[index].completed;
+  }
+
   GetTodos(sortOrder: String): TodoArray {
     if (sortOrder === SORTORDER_BY_IMPORTANCE) {
       this.todos.sort(SortByImportance);
@@ -72,7 +78,7 @@ export default class TodoApi {
       if (sortOrder === SORTORDER_BY_COMPLETED)
         this.todos.sort(SortByCompleted);
       else
-        this.todos.sort((a, b) => a.id - b.id);
+        this.todos.sort((a, b) => b.id - a.id);
 
     return this.todos;
   }
@@ -85,17 +91,17 @@ function SortByImportance(a: Todo, b: Todo): number {
     if (!a.highImportance && b.highImportance)
       return 1;
     else
-      return a.id - b.id;
+      return b.id - a.id;
 }
 
 function SortByCompleted(a: Todo, b: Todo): number {
   if (a.completed && !b.completed)
-    return -1;
+    return 1;
   else
     if (!a.completed && b.completed)
-      return 1;
+      return -1;
     else
-      return a.id - b.id;
+      return b.id - a.id;
 }
 
 export async function getEntity(): Promise<Entity> {
