@@ -1,7 +1,7 @@
 // @flow
 
 import React from 'react';
-import { Todo } from './types';
+import { TODO, FROM_LIST, Todo } from './types';
 
 type TodoListItemProps = {
   todo: Todo,
@@ -21,7 +21,7 @@ const TodoListItem = (props: TodoListItemProps): React.ReactElement<any> => {
   return (
     <div className="todo-list-item">
       <img src="../images/highimportance_32.svg" className={imgClassName} />
-      <label className={labelClassName}>{id + text}</label>
+      <a className={labelClassName} href={`#${TODO}/${id}${FROM_LIST}`}>{text}</a>
       <button className="todo-list-item__modify" onClick={() => props.onReverseTodoState(id)}>{firstButtonText}</button>
       <button className="todo-list-item__modify" onClick={() => props.onDeleteTodo(id)}>Удалить</button>
     </div>

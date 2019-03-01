@@ -4,7 +4,7 @@ import React from 'react';
 import { autobind } from 'core-decorators';
 import Explorer from './explorer';
 import TodoCard from './todo-card';
-import { SORTORDER_NONE, SORTORDER_BY_IMPORTANCE, SORTORDER_BY_COMPLETED } from './types';
+import { TODO, SORTORDER_NONE, SORTORDER_BY_IMPORTANCE, SORTORDER_BY_COMPLETED, FROM_LIST } from './types';
 
 type AppState = {
   route: string
@@ -33,11 +33,16 @@ export default class App extends React.Component {
   }
 
   render(): React.Element<any> {
-    const route = this.state.route;
-    if (route.startsWith('todo') && route.length > 5) {
-      let id = Number(route.substr(5, route.length - 5));
+    let route = this.state.route;
+
+    if (route.startsWith(TODO) && route.length > TODO.length + 1) {
+      const fromList = route.endsWith(FROM_LIST);
+      if (fromList)
+        route = route.substr(0, route.length - FROM_LIST.length);
+
+      let id = Number(route.substr(TODO.length + 1, route.length - (TODO.length + 1)));
       if (id >> 0)
-        return (<TodoCard id={id} />);
+        return (<TodoCard id={id} fromList={fromList} />);
     }
 
     let sortOrder = SORTORDER_NONE;

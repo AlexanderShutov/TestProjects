@@ -31,7 +31,6 @@ export default class Explorer extends React.Component {
   }
 
   componentDidMount() {
-    // eslint-disable-next-line react/no-did-mount-set-state
     this.refreshList(this.props.sortOrder, true);
   }
 
@@ -67,7 +66,7 @@ export default class Explorer extends React.Component {
     const { todos, sortOrder } = this.state;
 
     return (
-      <div className="explorer">
+      <div className="page">
         <NewTodo onAddTodo={this.handleAddTodo} />
         <div className="explorer__content">
           <TodoList todos={todos} onDeleteTodo={this.handleDeleteTodo} onReverseTodoState={this.handleReverseTodoState} />

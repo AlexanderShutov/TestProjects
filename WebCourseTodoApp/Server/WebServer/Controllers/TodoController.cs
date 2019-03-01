@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading;
 using System.Web.Http;
 using WebServer.Models;
 
@@ -19,6 +20,7 @@ namespace WebServer.Controllers
     // GET: api/Todo/5
     public Todo Get(int id)
     {
+      Thread.Sleep(1000);
       return Todos.Instance.Find(t => t.id == id);
     }
 

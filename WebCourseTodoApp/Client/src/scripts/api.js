@@ -109,6 +109,19 @@ export default class TodoApi {
   }
 
   /* Одна запись */
+
+  async get(id: number): Promise<Todo> {
+    const options = {
+      headers: { 'Content-Type': 'application/json' },
+      method: 'GET',
+    };
+
+    const response = await fetch('api/todo/' + id, options);
+    if (response.status === 200) {
+      return await response.json();
+    }
+    throw new Error(`Error: ${response.statusText}`);
+  }
 }
 
 function _sortByImportance(a: Todo, b: Todo): number {
