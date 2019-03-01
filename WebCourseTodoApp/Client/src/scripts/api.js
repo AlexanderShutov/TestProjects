@@ -55,7 +55,7 @@ export default class TodoApi {
       const todo = this.todos[index];
 
       if (await this._put(todo.id, todo.text, todo.highImportance, !todo.completed)) {
-        todo.completed = !todo.completed;
+        this.todos[index].completed = !todo.completed;
         return true;
       }
     }
