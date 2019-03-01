@@ -10,5 +10,5 @@ export type Todo = {
 export type TodoArray = ?Array<Todo>;
 
 export const SORTORDER_NONE = 'None';
-export const SORTORDER_BY_IMPORTANCE = 'ByImportance';
-export const SORTORDER_BY_COMPLETED = 'ByCompleted';
+export const SORTORDER_BY_IMPORTANCE = 'sort/importance';
+export const SORTORDER_BY_COMPLETED = 'sort/completed';

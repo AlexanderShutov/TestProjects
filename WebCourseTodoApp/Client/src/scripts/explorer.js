@@ -8,6 +8,10 @@ import NewTodo from './new-todo';
 import TodoList from './todo-list';
 import '../styles/app.css';
 
+type ExplorerProps = {
+  sortOrder: string,
+};
+
 type ExplorerStateProps = {
   todos: TodoArray,
   sortOrder: string,
@@ -17,6 +21,7 @@ type ExplorerStateProps = {
 
 export default class Explorer extends React.Component {
   api: Api;
+  props: ExplorerProps;
   state: ExplorerStateProps;
 
   constructor() {
@@ -27,7 +32,13 @@ export default class Explorer extends React.Component {
 
   componentDidMount() {
     // eslint-disable-next-line react/no-did-mount-set-state
-    this.refreshList(SORTORDER_NONE, true);
+    this.refreshList(this.props.sortOrder, true);
+  }
+
+  componentDidUpdate() {
+    if (this.state.sortOrder !== this.props.sortOrder) {
+      this.refreshList(this.props.sortOrder);
+    }
   }
 
   async refreshList(newSortOrder: ?string, fromServer: ?boolean): Promise<void> {
@@ -35,10 +46,6 @@ export default class Explorer extends React.Component {
       this.setState({ todos: await this.api.getAll(this.state.sortOrder, fromServer) });
     else
       this.setState({ todos: await this.api.getAll(newSortOrder, fromServer), sortOrder: newSortOrder });
-  }
-
-  handleSortList(newSortOrder: string) {
-    this.refreshList((this.state.sortOrder === newSortOrder) ? SORTORDER_NONE : newSortOrder);
   }
 
   async handleAddTodo(text: string, highImportance: boolean): Promise<void> {
@@ -66,8 +73,8 @@ export default class Explorer extends React.Component {
           <TodoList todos={todos} onDeleteTodo={this.handleDeleteTodo} onReverseTodoState={this.handleReverseTodoState} />
           <div className="list-sort-settings">
             <div className="list-sort-settings__title">Сортировать</div>
-            <div className="list-sort-settings__item" onClick={() => this.handleSortList(SORTORDER_BY_IMPORTANCE)}>{sortOrder === SORTORDER_BY_IMPORTANCE ? '✓' : ' '} По важности</div>
-            <div className="list-sort-settings__item" onClick={() => this.handleSortList(SORTORDER_BY_COMPLETED)}>{sortOrder === SORTORDER_BY_COMPLETED ? '✓' : ' '} По выполненности</div>
+            <div><a className="list-sort-settings__item" href={'#' + SORTORDER_BY_IMPORTANCE}>{sortOrder === SORTORDER_BY_IMPORTANCE ? '✓' : ' '} По важности</a></div>
+            <div><a className="list-sort-settings__item" href={'#' + SORTORDER_BY_COMPLETED}>{sortOrder === SORTORDER_BY_COMPLETED ? '✓' : ' '} По выполненности</a></div>
           </div>
         </div>
       </div>

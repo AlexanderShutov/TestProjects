@@ -45,7 +45,8 @@ body {
 }
 
 .list-sort-settings__item {
-  cursor: pointer;
+  color: rgb(204, 204, 204);
+  text-decoration: none;
   margin-top: 5px;
   margin-left: 10px;
   margin-bottom: 5px;
