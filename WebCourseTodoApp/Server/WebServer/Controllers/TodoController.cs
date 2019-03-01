@@ -37,7 +37,7 @@ namespace WebServer.Controllers
       {
         todo.text = value.text;
         todo.highImportance = value.highImportance;
-        todo.completed = todo.completed;
+        todo.completed = !todo.completed;
         return true;
       }
       return false;

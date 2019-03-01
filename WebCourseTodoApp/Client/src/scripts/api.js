@@ -16,7 +16,8 @@ export default class TodoApi {
 
     const response = await fetch('api/todo', options);
     if (response.status === 200) {
-      return await Number(response.text());
+      let responseText = await response.text();
+      return Number(responseText);
     }
     throw new Error(`Error: ${response.statusText}`);
   }
@@ -42,7 +43,8 @@ export default class TodoApi {
 
     const response = await fetch('api/todo', options);
     if (response.status === 200) {
-      return await Boolean(response.text());
+      let responseText = await response.text();
+      return Boolean(responseText);
     }
     throw new Error(`Error: ${response.statusText}`);
   }
@@ -73,7 +75,8 @@ export default class TodoApi {
 
     const response = await fetch('api/todo?id=' + id, options);
     if (response.status === 200) {
-      return await Boolean(response.text());
+      let responseText = await (response.text());
+      return Boolean(responseText);
     }
     throw new Error(`Error: ${response.statusText}`);
   }
