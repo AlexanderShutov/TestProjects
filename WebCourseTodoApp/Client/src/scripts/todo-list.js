@@ -26,7 +26,7 @@ const TodoList = (props: TodoListProps): React.ReactElement<any> => {
     );
   }
   else {
-    return (<div className="todo-list todo-list_empty">Добавьте новую задачу</div>);
+    return (<div className="todo-list todo-list_empty">Список задач пуст</div>);
   }
 };
 
