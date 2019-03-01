@@ -1,6 +1,6 @@
 // @flow
 
-import { TodoArray, SORTORDER_BY_IMPORTANCE, SORTORDER_BY_COMPLETED } from './types';
+import { Todo, TodoArray, SORTORDER_BY_IMPORTANCE, SORTORDER_BY_COMPLETED } from './types';
 
 export default class TodoApi {
   todos: TodoArray;
@@ -32,13 +32,14 @@ export default class TodoApi {
   }
 
   /* Изменение состояния */
-  async _put(id: number): Promise<boolean> {
+  async _put(id: number, text: string, highImportance: boolean, completed: boolean): Promise<boolean> {
     const options = {
       headers: { 'Content-Type': 'application/json' },
       method: 'PUT',
+      body: JSON.stringify({ id: id, text: text, highImportance: highImportance, completed: completed })
     };
 
-    const response = await fetch('api/todo?id=' + id, options);
+    const response = await fetch('api/todo', options);
     if (response.status === 200) {
       return await response.text();
     }
@@ -46,14 +47,20 @@ export default class TodoApi {
   }
 
   async reverseState(id: number): Promise<boolean> {
-    if (await this._put(id)) {
-      let index = this.todos.findIndex(t => t.id === id);
-      if (index > -1) {
-        this.todos[index].completed = !this.todos[index].completed;
+    let index = this.todos.findIndex(t => t.id === id);
+    if (index > -1) {
+      const todo = this.todos[index];
+
+      if (await this._put(todo.id, todo.text, todo.highImportance, !todo.completed)) {
+        todo.completed = !todo.completed;
+        return true;
       }
-      return true;
     }
     return false;
+  }
+
+  async put(todo: Todo): Promise<void> {
+    await this._put(todo.id, todo.text, todo.highImportance, todo.completed);
   }
 
   /* Удаление */

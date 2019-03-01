@@ -4,6 +4,7 @@ import React from 'react';
 import { hashHistory } from 'react-router';
 import { autobind } from 'core-decorators';
 import Api from './api';
+import { Todo } from './types';
 import '../styles/app.css';
 
 type TodoCardProps = {
@@ -14,7 +15,6 @@ type TodoCardProps = {
 type TodoCardState = {
   todo: ?Todo,
 };
-
 @autobind
 
 export default class TodoCard extends React.Component {
@@ -24,7 +24,6 @@ export default class TodoCard extends React.Component {
 
   constructor() {
     super();
-
     this.api = new Api();
     this.state = { todo: null };
   }
@@ -45,12 +44,17 @@ export default class TodoCard extends React.Component {
   }
 
   async load(id: number): Promise<void> {
-    console.log('load ' + id);
     this.setState({ todo: await this.api.get(id) });
   }
 
-  save() {
-    alert('save');
+  async save(): Promis<void> {
+    const todo = this.state.todo;
+
+    await this.api.put({
+      id: todo.id, text: this.TodoText.value,
+      highImportance: this.TodoHighImportance.checked, completed: this.TodoCompleted.checked
+    });
+
     this.goBack();
   }
 
@@ -97,8 +101,6 @@ export default class TodoCard extends React.Component {
               </label>
 
               <button className="todo-card__save" onClick={this.save}>Сохранить</button>
-              {this.props.id}
-              {this.props.fromList}
             </div>
           </div>
         }
@@ -109,27 +111,3 @@ export default class TodoCard extends React.Component {
     );
   }
 }
-
-
-/*
-
-
-
-  handleAddTodoClick() {
-    if (this.newTodoText.value === '')
-      this.newTodoText.focus();
-    else
-      this.props.onAddTodo(this.newTodoText.value, this.newTodoHighImportance.checked);
-  }
-
-  render(): React.Element<any> {
-    return (
-      <div className="new-todo">
-
-        <input type="text" className="new-todo__text-input" ref={node => this.newTodoText = node} />
-      </div>
-    );
-  }
-
-
-*/

@@ -20,7 +20,6 @@ namespace WebServer.Controllers
     // GET: api/Todo/5
     public Todo Get(int id)
     {
-      Thread.Sleep(1000);
       return Todos.Instance.Find(t => t.id == id);
     }
 
@@ -30,13 +29,15 @@ namespace WebServer.Controllers
       return Todos.Instance.Add(value.text, value.highImportance);
     }
 
-    // PUT: api/Todo/5
-    public bool Put(int id)
+    // PUT: api/Todo
+    public bool Put([FromBody]Todo value)
     {
-      Todo todo = Todos.Instance.Find(t => t.id == id);
+      Todo todo = Todos.Instance.Find(t => t.id == value.id);
       if (todo != null)
       {
-        todo.completed = !todo.completed;
+        todo.text = value.text;
+        todo.highImportance = value.highImportance;
+        todo.completed = todo.completed;
         return true;
       }
       return false;
