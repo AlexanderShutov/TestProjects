@@ -5,13 +5,15 @@ import { autobind } from 'core-decorators';
 import '../styles/app.css';
 
 type NewTodoProps = {
-  onAddTodo: (text: string, highImportance: boolean) => void,
+  onAddTodo: (text: string, highImportance: boolean) => Promise<void>,
 };
 
 @autobind
 
-export default class NewTodo extends React.Component<NewTodoProps> {
+export default class NewTodo extends React.Component {
   props: NewTodoProps;
+  newTodoText: any;
+  newTodoHighImportance: any;
 
   componentDidMount() {
     this.newTodoText.focus();
@@ -31,7 +33,7 @@ export default class NewTodo extends React.Component<NewTodoProps> {
         <input type="text" className="new-todo__text-input" ref={node => this.newTodoText = node} />
         <label className="new-todo__importance-text">
           <input type="checkbox" className="new-todo__importance" ref={node => this.newTodoHighImportance = node} />
-          Задача важная
+          Важная задача
         </label>
         <button className="new-todo__add"
           onClick={this.handleAddTodoClick}>Добавить</button>

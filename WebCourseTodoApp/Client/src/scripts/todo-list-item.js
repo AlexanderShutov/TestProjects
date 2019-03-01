@@ -1,15 +1,16 @@
 // @flow
 
 import React from 'react';
-import { TODO, FROM_LIST, Todo } from './types';
+import type { Todo } from './types';
+import { TODO, FROM_LIST } from './consts';
 
 type TodoListItemProps = {
   todo: Todo,
-  onReverseTodoState: (id: number) => void,
-  onDeleteTodo: (id: number) => void,
+  onReverseTodoState: (id: number) => Promise<void>,
+  onDeleteTodo: (id: number) => Promise<void>,
 };
 
-const TodoListItem = (props: TodoListItemProps): React.ReactElement<any> => {
+const TodoListItem = (props: TodoListItemProps): React.Element<any> => {
   const { id, text, completed, highImportance } = props.todo;
 
   const imgClassName = 'todo-list-item__importance' + (highImportance ? '' : ' todo-list-item__importance_hidden');

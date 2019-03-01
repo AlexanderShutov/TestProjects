@@ -1,6 +1,7 @@
 // @flow
 
-import { Todo, TodoArray, SORTORDER_BY_IMPORTANCE, SORTORDER_BY_COMPLETED } from './types';
+import type { Todo, TodoArray } from './types';
+import { SORTORDER_BY_IMPORTANCE, SORTORDER_BY_COMPLETED } from './consts';
 
 export default class TodoApi {
   todos: TodoArray;
@@ -15,7 +16,7 @@ export default class TodoApi {
 
     const response = await fetch('api/todo', options);
     if (response.status === 200) {
-      return await response.text();
+      return await Number(response.text());
     }
     throw new Error(`Error: ${response.statusText}`);
   }
@@ -41,7 +42,7 @@ export default class TodoApi {
 
     const response = await fetch('api/todo', options);
     if (response.status === 200) {
-      return await response.text();
+      return await Boolean(response.text());
     }
     throw new Error(`Error: ${response.statusText}`);
   }
@@ -72,12 +73,12 @@ export default class TodoApi {
 
     const response = await fetch('api/todo?id=' + id, options);
     if (response.status === 200) {
-      return await response.text();
+      return await Boolean(response.text());
     }
     throw new Error(`Error: ${response.statusText}`);
   }
 
-  async delete(id: number): Promise<void> {
+  async delete(id: number): Promise<boolean> {
     if (await this._delete(id)) {
       this.todos = this.todos.filter(t => t.id !== id);
       return true;
@@ -99,8 +100,8 @@ export default class TodoApi {
     throw new Error(`Error: ${response.statusText}`);
   }
 
-  async getAll(sortOrder: string, fromServer: boolean): Promise<TodoArray> {
-    if (fromServer)
+  async getAll(sortOrder: string, fromServer: ?boolean): Promise<TodoArray> {
+    if (fromServer != null && fromServer)
       this.todos = await this._getAllFromServer();
 
     if (sortOrder === SORTORDER_BY_IMPORTANCE) {

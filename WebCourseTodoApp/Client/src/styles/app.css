@@ -167,6 +167,7 @@ body {
   font-size: 85%;
 
   background-color: rgb(0, 28, 64);
+  color: white;
 }
 
 .todo-list-item {

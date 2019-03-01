@@ -4,7 +4,7 @@ import React from 'react';
 import { autobind } from 'core-decorators';
 import Explorer from './explorer';
 import TodoCard from './todo-card';
-import { TODO, SORTORDER_NONE, SORTORDER_BY_IMPORTANCE, SORTORDER_BY_COMPLETED, FROM_LIST } from './types';
+import { TODO, SORTORDER_NONE, SORTORDER_BY_IMPORTANCE, SORTORDER_BY_COMPLETED, FROM_LIST } from './consts';
 
 type AppState = {
   route: string

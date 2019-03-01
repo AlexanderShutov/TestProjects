@@ -3,7 +3,8 @@
 import React from 'react';
 import { autobind } from 'core-decorators';
 import Api from './api';
-import { TodoArray, SORTORDER_NONE, SORTORDER_BY_IMPORTANCE, SORTORDER_BY_COMPLETED } from './types';
+import type { TodoArray } from './types';
+import { SORTORDER_NONE, SORTORDER_BY_IMPORTANCE, SORTORDER_BY_COMPLETED } from './consts';
 import NewTodo from './new-todo';
 import TodoList from './todo-list';
 import '../styles/app.css';
@@ -27,7 +28,7 @@ export default class Explorer extends React.Component {
   constructor() {
     super();
     this.api = new Api();
-    this.state = { todos: null, sortOrder: SORTORDER_NONE };
+    this.state = { todos: [], sortOrder: SORTORDER_NONE };
   }
 
   componentDidMount() {

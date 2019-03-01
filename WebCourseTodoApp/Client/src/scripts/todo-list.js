@@ -6,13 +6,13 @@ import TodoListItem from './todo-list-item';
 
 type TodoListProps = {
   todos: TodoArray,
-  onReverseTodoState: (id: number) => void,
-  onDeleteTodo: (id: number) => void,
+  onReverseTodoState: (id: number) => Promise<void>,
+  onDeleteTodo: (id: number) => Promise<void>,
 };
 
-const TodoList = (props: TodoListProps): React.ReactElement<any> => {
+const TodoList = (props: TodoListProps): React.Element<any> => {
   const todos = props.todos;
-  if (todos !== null && todos.length > 0) {
+  if (todos != null && todos.length > 0) {
     return (
       <div className="todo-list">
         {
